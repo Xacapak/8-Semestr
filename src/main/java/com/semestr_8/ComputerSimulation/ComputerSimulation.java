@@ -37,6 +37,8 @@ public class ComputerSimulation {
                     task1.run();
                 }
                 case 2 -> {
+                    Task2 task2 = new Task2();
+
 
                 }
                 case 3 -> {
