@@ -38,6 +38,7 @@ public class ComputerSimulation {
                 }
                 case 2 -> {
                     Task2 task2 = new Task2();
+                    task2.run();
 
 
                 }
