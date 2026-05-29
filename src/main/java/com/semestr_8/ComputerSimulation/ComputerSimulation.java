@@ -18,7 +18,8 @@ public class ComputerSimulation {
             System.out.println("1 - Задание (1)");
             System.out.println("2 - Задание (2)");
             System.out.println("3 - Задание (3)");
-            System.out.println("4 - ВЫХОД");
+            System.out.println("4 - Лабораторные работы");
+            System.out.println("5 - ВЫХОД");
             System.out.println(lineSeparator);
 
             byte taskNumber;
@@ -26,7 +27,7 @@ public class ComputerSimulation {
             try {
                 taskNumber = scanner.nextByte();
             } catch (Exception e) {
-                System.out.println("Ошибка ввода! Введите число от 1 до 4.");
+                System.out.println("Ошибка ввода! Введите число от 1 до 5.");
                 scanner.nextLine();
                 continue;
             }
@@ -43,12 +44,17 @@ public class ComputerSimulation {
 
                 }
                 case 3 -> {
-
+                    Task3 task3 = new Task3();
+                    task3.run();
                 }
                 case 4 -> {
+                    System.out.println("Запуск графического приложения");
+                    launchJavaFX();
+                }
+                case 5 ->{
                     System.out.println("Выход из программы.");
                     exitProgram = true;
-                }
+                    }
                 default -> System.out.println("Некорректный номер задания!\n");
             }
         }
@@ -56,4 +62,10 @@ public class ComputerSimulation {
         scanner.close();
 
     }
+
+    private static void launchJavaFX() {
+        // Запускаем JavaFX приложение
+        javafx.application.Application.launch(JavaFXLauncher.class);
+    }
+
 }

@@ -14,6 +14,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GraphicalConstruction {
 
@@ -210,6 +211,72 @@ public class GraphicalConstruction {
         // ============ ПОКАЗ ГРАФИКА ============
         showChart(chart, "Задание 2 - Результаты моделирования");
 
+    }
+
+    public static void plotTask3(List<Double> timePoints,
+                                 List<Integer> queueSize,
+                                 List<Integer> channelState) {
+        // ==== График длины очереди ====
+        XYSeries queueSeries = new XYSeries("Длина очереди");
+        for (int i = 0; i < timePoints.size(); i++) {
+            queueSeries.add(timePoints.get(i), queueSize.get(i));
+        }
+
+        // ==== График состояния канала (0/1) для наглядности (можно отдельным dataset) ====
+        XYSeries channelSeries = new XYSeries("Состояние канала (0-своб.,1-зан.)");
+        for (int i = 0; i < timePoints.size(); i++) {
+            channelSeries.add(timePoints.get(i), channelState.get(i));
+        }
+
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(queueSeries);
+        dataset.addSeries(channelSeries);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Задание 3: Одноканальная СМО с ожиданием",
+                "Время t",
+                "Длина очереди / Состояние канала",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+
+        XYPlot plot = chart.getXYPlot();
+        NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+        domainAxis.setRange(0, 100);
+        domainAxis.setLabel("Время t");
+
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setRange(-0.5, Math.max(10, getMaxQueue(queueSize) + 1));
+        rangeAxis.setLabel("Длина очереди / Состояние канала");
+
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        // Серия 0 – очередь (ступеньки)
+        renderer.setSeriesLinesVisible(0, true);
+        renderer.setSeriesShapesVisible(0, false);
+        renderer.setSeriesPaint(0, Color.BLUE);
+        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+        // Серия 1 – состояние канала (ступеньки, пунктир?)
+        renderer.setSeriesLinesVisible(1, true);
+        renderer.setSeriesShapesVisible(1, false);
+        renderer.setSeriesPaint(1, Color.GREEN);
+        renderer.setSeriesStroke(1, new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[]{6.0f, 4.0f}, 0.0f));
+
+        plot.setRenderer(renderer);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setDomainGridlinePaint(Color.LIGHT_GRAY);
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+
+        showChart(chart, "Задание 3 - Результаты моделирования");
+    }
+
+    // Вспомогательный метод для поиска максимума в списке
+    private static int getMaxQueue(List<Integer> queueSize) {
+        int max = 0;
+        for (int v : queueSize) if (v > max) max = v;
+        return max;
     }
 
     private static void showChart(JFreeChart chart, String title){
